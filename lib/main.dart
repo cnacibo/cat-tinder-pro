@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'screens/home_screen.dart';
-import 'services/cat_api_service.dart';
-import 'screens/breeds_screen.dart';
+import 'presentation/screens/home_screen.dart';
+import 'data/sources/cat_api_service.dart';
+import 'presentation/screens/breeds_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import '../models/breed.dart';
-import '../services/cat_api_service.dart';
+import '../../data/models/breed.dart';
+import '../../data/sources/cat_api_service.dart';
 
 class BreedsScreen extends StatefulWidget {
   const BreedsScreen({super.key});
