@@ -183,8 +183,7 @@ class _HomeScreenState extends State<HomeScreen> {
       borderRadius: BorderRadius.circular(20),
       child: LayoutBuilder(
         builder: (context, constraints) {
-          final double maxWidth = constraints.maxWidth * 0.9;
-          final double imageSize = maxWidth;
+          final double imageSize = constraints.maxHeight * 0.9;
           
           return SizedBox(
             width: imageSize,
