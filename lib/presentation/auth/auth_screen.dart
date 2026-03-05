@@ -3,7 +3,7 @@ import 'package:provider/provider.dart';
 import '../../core/injection.dart';
 import 'auth_view_model.dart';
 import '../../data/repositories/auth_repository.dart';
-import '../../main.dart';
+import '../screens/main_tab_screen.dart';
 
 class AuthScreen extends StatelessWidget {
   const AuthScreen({super.key});

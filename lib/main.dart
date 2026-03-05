@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'presentation/screens/home_screen.dart';
+import 'presentation/screens/main_tab_screen.dart';
 import 'data/sources/cat_api_service.dart';
-import 'presentation/screens/breeds_screen.dart';
 import 'core/injection.dart' as di;
 import 'data/repositories/auth_repository.dart';
 import 'presentation/auth/auth_screen.dart';
@@ -131,30 +130,3 @@ class _InitialScreenState extends State<InitialScreen> {
   }
 }
 
-class MainTabScreen extends StatefulWidget {
-  const MainTabScreen({super.key});
-
-  @override
-  State<MainTabScreen> createState() => _MainTabScreenState();
-}
-
-class _MainTabScreenState extends State<MainTabScreen> {
-  int _currentIndex = 0;
-
-  final List<Widget> _screens = [const HomeScreen(), const BreedsScreen()];
-  
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: _screens[_currentIndex],
-      bottomNavigationBar: NavigationBar(
-        selectedIndex: _currentIndex,
-        onDestinationSelected: (i) => setState(() => _currentIndex = i),
-        destinations: const [
-          NavigationDestination(icon: Icon(Icons.pets), label: 'Cats'),
-          NavigationDestination(icon: Icon(Icons.list), label: 'Breeds'),
-        ],
-      ),
-    );
-  }
-}

@@ -8,14 +8,14 @@ import '../../core/injection.dart';
 import '../../data/repositories/auth_repository.dart';
 import '../auth/auth_screen.dart';
 
-class HomeScreen extends StatefulWidget {
-  const HomeScreen({super.key});
+class CatsScreen extends StatefulWidget {
+  const CatsScreen({super.key});
 
   @override
-  State<HomeScreen> createState() => _HomeScreenState();
+  State<CatsScreen> createState() => _CatsScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
+class _CatsScreenState extends State<CatsScreen> {
   final CatApiService _catApiService = CatApiService();
   Future<CatImage>? _catFuture;
   int _likesCount = 0;
