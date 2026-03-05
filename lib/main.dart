@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'presentation/screens/main_tab_screen.dart';
 import 'data/sources/cat_api_service.dart';
 import 'core/injection.dart' as di;
-import 'data/repositories/auth_repository.dart';
+import 'domain/repositories/auth_repository.dart';
 import 'presentation/auth/auth_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'presentation/screens/onboarding_screen.dart';

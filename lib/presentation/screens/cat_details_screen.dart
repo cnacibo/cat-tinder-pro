@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../data/models/breed.dart';
+import '../../domain/entities/breed.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 
 class CatDetailsScreen extends StatelessWidget {

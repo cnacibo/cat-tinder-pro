@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../data/models/breed.dart';
+import '../../domain/entities/breed.dart';
 import '../../data/sources/cat_api_service.dart';
 
 class BreedsScreen extends StatefulWidget {

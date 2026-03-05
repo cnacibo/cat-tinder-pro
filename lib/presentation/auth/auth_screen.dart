@@ -1,21 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import '../../core/injection.dart';
-import 'auth_view_model.dart';
-import '../../data/repositories/auth_repository.dart';
 import '../screens/main_tab_screen.dart';
+import '../../domain/usecases/sign_in_usecase.dart';
+import '../../domain/usecases/sign_up_usecase.dart';
 
 class AuthScreen extends StatelessWidget {
   const AuthScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (_) => AuthViewModel(getIt<AuthRepository>()),
-      child: Scaffold(
-        appBar: AppBar(title: const Text('Welcome')),
-        body: const AuthForm(),
-      ),
+    return Scaffold(
+      appBar: AppBar(title: const Text('Welcome')),
+      body: const AuthForm(),
     );
   }
 }
@@ -29,11 +25,15 @@ class AuthForm extends StatefulWidget {
 
 class _AuthFormState extends State<AuthForm> with SingleTickerProviderStateMixin {
   bool _isLogin = true;
+  bool _isLoading = false;
   final _formKey = GlobalKey<FormState>();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   late AnimationController _animationController;
   late Animation<double> _fadeAnimation;
+
+  late final SignInUseCase _signInUseCase;
+  late final SignUpUseCase _signUpUseCase;
 
   @override
   void initState() {
@@ -44,6 +44,9 @@ class _AuthFormState extends State<AuthForm> with SingleTickerProviderStateMixin
     );
     _fadeAnimation = CurvedAnimation(parent: _animationController, curve: Curves.easeIn);
     _animationController.forward();
+
+    _signInUseCase = getIt<SignInUseCase>();
+    _signUpUseCase = getIt<SignUpUseCase>();
   }
 
   @override
@@ -65,14 +68,16 @@ class _AuthFormState extends State<AuthForm> with SingleTickerProviderStateMixin
   Future<void> _submit() async {
     if (!_formKey.currentState!.validate()) return;
 
-    final viewModel = context.read<AuthViewModel>();
+    setState(() => _isLoading = true);
+
     final email = _emailController.text.trim();
     final password = _passwordController.text.trim();
 
     final success = _isLogin
-        ? await viewModel.signIn(email, password)
-        : await viewModel.signUp(email, password);
+        ? await _signInUseCase.execute(email, password)
+        : await _signUpUseCase.execute(email, password);
 
+    setState(() => _isLoading = false);
     if (success && mounted) {
       Navigator.of(context).pushReplacement(
         MaterialPageRoute(builder: (_) => const MainTabScreen()),

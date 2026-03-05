@@ -1,4 +1,4 @@
-import './auth_repository.dart';
+import '../../domain/repositories/auth_repository.dart';
 import '../sources/auth_remote_datasource.dart';
 
 class AuthRepositoryImpl implements AuthRepository {

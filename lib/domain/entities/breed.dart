@@ -46,31 +46,4 @@ class Breed {
     this.strangerFriendly,
     this.vocalisation,
   });
-
-  factory Breed.fromJson(Map<String, dynamic> json) {
-    return Breed(
-      weight: Map<String, String>.from(json['weight'] ?? {}),
-      id: json['id'] ?? '',
-      name: json['name'] ?? 'Unknown Breed',
-      temperament: json['temperament'],
-      origin: json['origin'],
-      countryCodes: json['country_codes'],
-      countryCode: json['country_code'],
-      lifeSpan: json['life_span'],
-      wikipediaUrl: json['wikipedia_url'],
-      description: json['description'],
-      adaptability: json['adaptability'],
-      affectionLevel: json['affection_level'],
-      childFriendly: json['child_friendly'],
-      dogFriendly: json['dog_friendly'],
-      energyLevel: json['energy_level'],
-      grooming: json['grooming'],
-      healthIssues: json['health_issues'],
-      intelligence: json['intelligence'],
-      sheddingLevel: json['shedding_level'],
-      socialNeeds: json['social_needs'],
-      strangerFriendly: json['stranger_friendly'],
-      vocalisation: json['vocalisation'],
-    );
-  }
 }

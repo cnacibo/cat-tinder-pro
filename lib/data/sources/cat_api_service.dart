@@ -1,5 +1,5 @@
-import '../models/cat_image.dart';
-import '../models/breed.dart';
+import '../models/cat_image_model.dart';
+import '../models/breed_model.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
@@ -11,7 +11,7 @@ class CatApiService {
     _apiKey = const String.fromEnvironment('CAT_API_KEY');
   }
 
-  Future<CatImage> getRandomCatImage() async {
+  Future<CatImageModel> getRandomCatImage() async {
     try {
       final response = await http.get(
         Uri.parse('$_baseUrl/images/search?has_breeds=1&limit=1'),
@@ -21,7 +21,7 @@ class CatApiService {
       if (response.statusCode == 200) {
         final List<dynamic> data = jsonDecode(response.body);
         if (data.isNotEmpty) {
-          return CatImage.fromJson(data.first);
+          return CatImageModel.fromJson(data.first);
         } else {
           throw Exception('No cat images found');
         }
@@ -37,7 +37,7 @@ class CatApiService {
     }
   }
 
-  Future<List<Breed>> getBreeds() async {
+  Future<List<BreedModel>> getBreeds() async {
     try {
       final response = await http.get(
         Uri.parse('$_baseUrl/breeds'),
@@ -47,7 +47,7 @@ class CatApiService {
       if (response.statusCode == 200) {
         final List<dynamic> data = jsonDecode(response.body);
         if (data.isNotEmpty) {
-          return data.map((json) => Breed.fromJson(json)).toList();
+          return data.map((json) => BreedModel.fromJson(json)).toList();
         } else {
           throw Exception('Empty data');
         }
