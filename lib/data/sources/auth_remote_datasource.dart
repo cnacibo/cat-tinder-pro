@@ -6,6 +6,7 @@ abstract class AuthRemoteDataSource {
   Future<String> signIn(String email, String password);
   Future<void> signOut();
   Future<String?> getCurrentUserId();
+  Future<bool> isLoggedIn();
 }
 
 class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
@@ -53,7 +54,6 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
     return firebaseAuth.currentUser?.uid;
   }
 
-  /// Преобразование FirebaseAuthException в наше исключение
   Exception _handleAuthException(FirebaseAuthException e) {
     switch (e.code) {
       case 'email-already-in-use':
@@ -69,4 +69,9 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
         return ServerException(e.message ?? 'Authentication error');
     }
   }
+
+  Future<bool> isLoggedIn() async {
+    return firebaseAuth.currentUser != null;
+  }
+
 }

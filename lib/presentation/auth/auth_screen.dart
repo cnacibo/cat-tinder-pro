@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../core/injection.dart';
-import '../screens/home_screen.dart';
 import 'auth_view_model.dart';
 import '../../data/repositories/auth_repository.dart';
 import '../../main.dart';

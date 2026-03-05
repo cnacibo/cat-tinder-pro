@@ -6,7 +6,6 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 
 // Data sources
-import '../../data/sources/auth_local_datasource.dart';
 import '../../data/sources/auth_remote_datasource.dart';
 import '../../data/sources/cat_api_service.dart';
 
@@ -26,9 +25,6 @@ Future<void> init() async {
   getIt.registerLazySingleton<FirebaseAnalytics>(() => FirebaseAnalytics.instance);
 
   // Data sources
-  getIt.registerLazySingleton<AuthLocalDataSource>(
-    () => AuthLocalDataSourceImpl(secureStorage: getIt<FlutterSecureStorage>()),
-  );
 
   getIt.registerLazySingleton<FirebaseAuth>(() => FirebaseAuth.instance);
 
@@ -38,9 +34,7 @@ Future<void> init() async {
 
   // Repositories
   getIt.registerLazySingleton<AuthRepository>(
-    () => AuthRepositoryImpl(
-      remoteDataSource: getIt<AuthRemoteDataSource>(),
-      localDataSource: getIt<AuthLocalDataSource>()),
+    () => AuthRepositoryImpl(remoteDataSource: getIt<AuthRemoteDataSource>()),
   );
 
 }
