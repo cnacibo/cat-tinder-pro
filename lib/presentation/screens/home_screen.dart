@@ -4,6 +4,9 @@ import '../../data/sources/cat_api_service.dart';
 import '../../data/models/cat_image.dart';
 import './cat_details_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import '../../core/injection.dart'; 
+import '../../data/repositories/auth_repository.dart';
+import '../auth/auth_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -23,6 +26,51 @@ class _HomeScreenState extends State<HomeScreen> {
     super.initState();
     _loadRandomCat();
     _loadSavedLikes();
+  }
+
+  Future<void> _showLogoutDialog() async {
+    final shouldLogout = await showDialog<bool>(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: const Text('Sign Out'),
+        content: const Text('Are you sure you want to sign out?'),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(ctx, false),
+            child: const Text('Cancel'),
+          ),
+          TextButton(
+            onPressed: () => Navigator.pop(ctx, true),
+            child: const Text('Sign Out'),
+          ),
+        ],
+      ),
+    );
+    if (shouldLogout == true) {
+      await _signOut();
+    }
+  }
+
+  Future<void> _signOut() async {
+    final authRepo = getIt<AuthRepository>();
+    final result = await authRepo.signOut();
+    if (!result) {
+      ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Logout failed')),
+        );
+    } else {
+      Navigator.of(context).pushReplacement(
+          MaterialPageRoute(builder: (_) => const AuthScreen()),
+        );
+    }
+  }
+
+  Widget _buildLogoutButton() {
+    return IconButton(
+      icon: const Icon(Icons.logout, color: Colors.white),
+      onPressed: _showLogoutDialog,
+      tooltip: 'Sign Out',
+    );
   }
 
   Future<void> _loadSavedLikes() async {
@@ -183,7 +231,8 @@ class _HomeScreenState extends State<HomeScreen> {
       borderRadius: BorderRadius.circular(20),
       child: LayoutBuilder(
         builder: (context, constraints) {
-          final double imageSize = constraints.maxHeight * 0.9;
+          final double minConstain = constraints.maxHeight < constraints.maxWidth ? constraints.maxHeight : constraints.maxWidth;
+          final double imageSize = minConstain * 0.9;
           
           return SizedBox(
             width: imageSize,
@@ -364,7 +413,7 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ),
         centerTitle: true,
-        actions: [_buildLikesCounter()],
+        actions: [_buildLogoutButton(),_buildLikesCounter()],
       ),
       body: FutureBuilder<CatImage>(
         future: _catFuture,

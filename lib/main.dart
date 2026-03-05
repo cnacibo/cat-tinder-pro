@@ -2,10 +2,21 @@ import 'package:flutter/material.dart';
 import 'presentation/screens/home_screen.dart';
 import 'data/sources/cat_api_service.dart';
 import 'presentation/screens/breeds_screen.dart';
+import 'core/injection.dart' as di;
+import 'data/repositories/auth_repository.dart';
+import 'presentation/auth/auth_screen.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'presentation/screens/onboarding_screen.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await di.init();
   await CatApiService.initialize();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   runApp(const CatTinder());
 }
 
@@ -71,8 +82,51 @@ class CatTinder extends StatelessWidget {
     return MaterialApp(
       title: 'Cat Tinder',
       theme: myTheme,
-      home: const MainTabScreen(),
+      home: const InitialScreen(),
       debugShowCheckedModeBanner: false,
+    );
+  }
+}
+
+class InitialScreen extends StatefulWidget {
+  const InitialScreen({super.key});
+
+  @override
+  State<InitialScreen> createState() => _InitialScreenState();
+}
+
+class _InitialScreenState extends State<InitialScreen> {
+  @override
+  void initState() {
+    super.initState();
+    _checkAuthStatus();
+  }
+  Future<void> _checkAuthStatus() async {
+    final prefs = await SharedPreferences.getInstance();
+    final onboardingCompleted = prefs.getBool('onboarding_completed') ?? false;
+
+    Widget nextScreen;
+    if (!onboardingCompleted) {
+      nextScreen = const OnboardingScreen();
+    } else {
+      final authRepo = di.getIt<AuthRepository>();
+      final loggedIn = await authRepo.isLoggedIn();
+      nextScreen = loggedIn ? const MainTabScreen() : const AuthScreen();
+    }
+
+    if (mounted) {
+      Navigator.of(context).pushReplacement(
+        MaterialPageRoute(builder: (_) => nextScreen),
+      );
+    }
+  }
+  @override
+  Widget build(BuildContext context) {
+  
+    return const Scaffold(
+      body: Center(
+        child: CircularProgressIndicator(),
+      ),
     );
   }
 }
@@ -88,7 +142,7 @@ class _MainTabScreenState extends State<MainTabScreen> {
   int _currentIndex = 0;
 
   final List<Widget> _screens = [const HomeScreen(), const BreedsScreen()];
-
+  
   @override
   Widget build(BuildContext context) {
     return Scaffold(

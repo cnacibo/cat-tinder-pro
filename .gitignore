@@ -41,4 +41,9 @@ app.*.map.json
 .env
 
 .flutter-plugins
-.packages     
+.packages  
+
+android/app/google-services.json
+ios/Runner/GoogleService-Info.plist
+macos/Runner/GoogleService-Info.plist
+lib/firebase_options.dart
