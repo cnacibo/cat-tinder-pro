@@ -77,8 +77,10 @@ class _AuthFormState extends State<AuthForm> with SingleTickerProviderStateMixin
         ? await _signInUseCase.execute(email, password)
         : await _signUpUseCase.execute(email, password);
 
+    if (!mounted) return;
     setState(() => _isLoading = false);
-    if (success && mounted) {
+
+    if (success) {
       Navigator.of(context).pushReplacement(
         MaterialPageRoute(builder: (_) => const MainTabScreen()),
       );
@@ -109,6 +111,7 @@ class _AuthFormState extends State<AuthForm> with SingleTickerProviderStateMixin
             TextFormField(
               controller: _emailController,
               decoration: const InputDecoration(labelText: 'Email'),
+              enabled: !_isLoading,
               validator: (value) {
                 if (value == null || value.isEmpty) return 'Email required';
                 if (!RegExp(r'^[^@]+@[^@]+\.[^@]+').hasMatch(value)) {
@@ -122,6 +125,7 @@ class _AuthFormState extends State<AuthForm> with SingleTickerProviderStateMixin
               controller: _passwordController,
               obscureText: true,
               decoration: const InputDecoration(labelText: 'Password'),
+              enabled: !_isLoading,
               validator: (value) {
                 if (value == null || value.isEmpty) return 'Password required';
                 if (value.length < 6) return 'Min 6 characters';
@@ -129,12 +133,15 @@ class _AuthFormState extends State<AuthForm> with SingleTickerProviderStateMixin
               },
             ),
             const SizedBox(height: 32),
-            ElevatedButton(
-              onPressed: _submit,
-              child: Text(_isLogin ? 'Login' : 'Sign Up'),
-            ),
+            if (_isLoading)
+              const CircularProgressIndicator()
+            else
+              ElevatedButton(
+                onPressed: _submit,
+                child: Text(_isLogin ? 'Login' : 'Sign Up'),
+              ),
             TextButton(
-              onPressed: _toggleMode,
+              onPressed: _isLoading ? null : _toggleMode,
               child: Text(_isLogin ? 'Create an account' : 'Already have an account?'),
             ),
           ],
