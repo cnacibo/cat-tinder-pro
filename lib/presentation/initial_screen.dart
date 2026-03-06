@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import '../core/injection.dart' as di;
-import '../domain/repositories/auth_repository.dart';
+import '../../core/injection.dart'; 
 import 'onboarding/onboarding_screen.dart';
 import 'auth/auth_screen.dart';
 import 'main_tab_screen.dart';
+import '../domain/usecases/check_onboarding_usecase.dart';
+import '../domain/usecases/is_logged_in_usecase.dart';
 
 class InitialScreen extends StatefulWidget {
   const InitialScreen({super.key});
@@ -14,21 +14,24 @@ class InitialScreen extends StatefulWidget {
 }
 
 class _InitialScreenState extends State<InitialScreen> {
+  late final CheckOnboardingUseCase _checkOnboarding;
+  late final IsLoggedInUseCase _isLoggedIn;
+
   @override
   void initState() {
     super.initState();
+    _checkOnboarding = getIt<CheckOnboardingUseCase>();
+    _isLoggedIn = getIt<IsLoggedInUseCase>();
     _checkAuthStatus();
   }
   Future<void> _checkAuthStatus() async {
-    final prefs = await SharedPreferences.getInstance();
-    final onboardingCompleted = prefs.getBool('onboarding_completed') ?? false;
+    final onboardingCompleted = await _checkOnboarding.execute();
 
     Widget nextScreen;
     if (!onboardingCompleted) {
       nextScreen = const OnboardingScreen();
     } else {
-      final authRepo = di.getIt<AuthRepository>();
-      final loggedIn = await authRepo.isLoggedIn();
+      final loggedIn = await _isLoggedIn.execute();
       nextScreen = loggedIn ? const MainTabScreen() : const AuthScreen();
     }
 
@@ -40,7 +43,6 @@ class _InitialScreenState extends State<InitialScreen> {
   }
   @override
   Widget build(BuildContext context) {
-  
     return const Scaffold(
       body: Center(
         child: CircularProgressIndicator(),

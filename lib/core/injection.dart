@@ -12,6 +12,9 @@ import '../domain/usecases/sign_up_usecase.dart';
 import '../domain/usecases/get_likes_count_usecase.dart';
 import '../domain/usecases/like_cat_usecase.dart';
 import '../domain/usecases/reset_likes_usecase.dart';
+import '../domain/usecases/check_onboarding_usecase.dart';
+import '../domain/usecases/complete_onboarding_usecase.dart';
+import '../domain/usecases/is_logged_in_usecase.dart';
 
 // Data sources
 import '../data/datasources/auth_remote_datasource.dart';
@@ -28,6 +31,8 @@ import '../domain/repositories/cat_repository.dart';
 import '../data/repositories/cat_repository_impl.dart';
 import '../domain/repositories/likes_repository.dart';
 import '../data/repositories/likes_repository_impl.dart';
+import '../domain/repositories/onboarding_repository.dart';
+import '../data/repositories/onboarding_repository_impl.dart';
 
 
 final getIt = GetIt.instance;
@@ -61,6 +66,9 @@ Future<void> init({String? catApiKey}) async {
   getIt.registerLazySingleton<LikesRepository>(
     () => LikesRepositoryImpl(localDataSource: getIt()),
   );
+  getIt.registerLazySingleton<OnboardingRepository>(
+  () => OnboardingRepositoryImpl(sharedPreferences: getIt()),
+);
 
   // Use cases
   getIt.registerLazySingleton(() => SignInUseCase(getIt()));
@@ -70,5 +78,7 @@ Future<void> init({String? catApiKey}) async {
   getIt.registerLazySingleton(() => GetLikesCountUseCase(getIt()));
   getIt.registerLazySingleton(() => LikeCatUseCase(getIt()));
   getIt.registerLazySingleton(() => ResetLikesUseCase(getIt()));
-
+  getIt.registerLazySingleton(() => CheckOnboardingUseCase(getIt()));
+  getIt.registerLazySingleton(() => CompleteOnboardingUseCase(getIt()));
+  getIt.registerLazySingleton(() => IsLoggedInUseCase(getIt()));
 }

@@ -11,11 +11,11 @@ void main() async {
   );
   const apiKey = String.fromEnvironment('CAT_API_KEY');
   await di.init(catApiKey: apiKey.isNotEmpty ? apiKey : null);
-  runApp(const CatTinder());
+  runApp(const CatTinderPro());
 }
 
-class CatTinder extends StatelessWidget {
-  const CatTinder({super.key});
+class CatTinderPro extends StatelessWidget {
+  const CatTinderPro({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -74,7 +74,7 @@ class CatTinder extends StatelessWidget {
       );
 
     return MaterialApp(
-      title: 'Cat Tinder',
+      title: 'Cat Tinder Pro',
       theme: myTheme,
       home: const InitialScreen(),
       debugShowCheckedModeBanner: false,

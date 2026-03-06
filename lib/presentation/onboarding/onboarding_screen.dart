@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import '../../core/injection.dart'; 
 import '../auth/auth_screen.dart';
+import '../../domain/usecases/complete_onboarding_usecase.dart';
 
 class OnboardingScreen extends StatefulWidget {
   const OnboardingScreen({super.key});
@@ -10,8 +11,17 @@ class OnboardingScreen extends StatefulWidget {
 }
 
 class _OnboardingScreenState extends State<OnboardingScreen> {
+  late final CompleteOnboardingUseCase _completeOnboarding;
+
   final PageController _pageController = PageController();
   int _currentPage = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    _completeOnboarding = getIt<CompleteOnboardingUseCase>();
+  }
+
 
   final List<OnboardingPage> _pages = [
     OnboardingPage(
@@ -38,13 +48,12 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     if (_currentPage < _pages.length - 1) {
       _pageController.nextPage(duration: const Duration(milliseconds: 300), curve: Curves.ease);
     } else {
-      _completeOnboarding();
+      _finishOnboarding();
     }
   }
 
-  Future<void> _completeOnboarding() async {
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.setBool('onboarding_completed', true);
+  void _finishOnboarding() async {
+    await _completeOnboarding.execute();
     if (mounted) {
       Navigator.of(context).pushReplacement(
         MaterialPageRoute(builder: (_) => const AuthScreen()),
@@ -79,7 +88,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 TextButton(
-                  onPressed: _completeOnboarding,
+                  onPressed: _finishOnboarding,
                   child: const Text('Skip'),
                 ),
                 Row(
