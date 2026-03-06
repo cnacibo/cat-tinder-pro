@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import '../../data/sources/cat_api_service.dart';
 import '../../domain/entities/cat_image.dart';
 import './cat_details_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../core/injection.dart'; 
 import '../../domain/repositories/auth_repository.dart';
-import '../auth/auth_screen.dart';
+import 'auth_screen.dart';
 import '../../domain/usecases/get_random_cat.dart';
 
 class CatsScreen extends StatefulWidget {
@@ -17,7 +16,7 @@ class CatsScreen extends StatefulWidget {
 }
 
 class _CatsScreenState extends State<CatsScreen> {
-  late final GetRandomCat _getRandomCat;
+  late final GetRandomCatUseCase _getRandomCat;
 
   Future<CatImage>? _catFuture;
   int _likesCount = 0;
@@ -26,7 +25,7 @@ class _CatsScreenState extends State<CatsScreen> {
   @override
   void initState() {
     super.initState();
-    _getRandomCat = getIt<GetRandomCat>();
+    _getRandomCat = getIt<GetRandomCatUseCase>();
     _loadRandomCat();
     _loadSavedLikes();
   }

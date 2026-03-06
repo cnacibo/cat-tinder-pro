@@ -5,15 +5,16 @@ import 'dart:convert';
 
 class CatApiService {
   static const _baseUrl = 'https://api.thecatapi.com/v1';
-  static String? _apiKey;
+  final String? _apiKey;
+  final http.Client _httpClient;
 
-  static Future<void> initialize() async {
-    _apiKey = const String.fromEnvironment('CAT_API_KEY');
-  }
+  CatApiService({required http.Client httpClient, String? apiKey})
+      : _httpClient = httpClient,
+        _apiKey = apiKey;
 
   Future<CatImageModel> getRandomCatImage() async {
     try {
-      final response = await http.get(
+      final response = await _httpClient.get(
         Uri.parse('$_baseUrl/images/search?has_breeds=1&limit=1'),
         headers: _apiKey?.isNotEmpty == true ? {'x-api-key': _apiKey!} : {},
       );
@@ -39,7 +40,7 @@ class CatApiService {
 
   Future<List<BreedModel>> getBreeds() async {
     try {
-      final response = await http.get(
+      final response = await _httpClient.get(
         Uri.parse('$_baseUrl/breeds'),
         headers: _apiKey?.isNotEmpty == true ? {'x-api-key': _apiKey!} : {},
       );

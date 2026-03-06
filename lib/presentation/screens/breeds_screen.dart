@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../domain/entities/breed.dart';
-import '../../data/sources/cat_api_service.dart';
+import '../../domain/usecases/get_breeds.dart';
+import '../../core/injection.dart';
 
 class BreedsScreen extends StatefulWidget {
   const BreedsScreen({super.key});
@@ -10,7 +11,8 @@ class BreedsScreen extends StatefulWidget {
 }
 
 class _BreedsScreenState extends State<BreedsScreen> {
-  final CatApiService _catApiService = CatApiService();
+  late final GetBreedsUseCase _getBreedsUseCase;
+
   late Future<List<Breed>>? _breedsFuture;
   List<Breed> _filteredBreeds = [];
   final TextEditingController _searchController = TextEditingController();
@@ -19,6 +21,7 @@ class _BreedsScreenState extends State<BreedsScreen> {
   @override
   void initState() {
     super.initState();
+    _getBreedsUseCase = getIt<GetBreedsUseCase>();
     _loadBreeds();
     _searchController.addListener(_onSearch);
   }
@@ -31,7 +34,7 @@ class _BreedsScreenState extends State<BreedsScreen> {
 
   Future<void> _loadBreeds() async {
     setState(() {
-      _breedsFuture = _catApiService.getBreeds();
+      _breedsFuture = _getBreedsUseCase.execute();
     });
   }
 

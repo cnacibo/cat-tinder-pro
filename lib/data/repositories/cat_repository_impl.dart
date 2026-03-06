@@ -4,14 +4,14 @@ import '../models/breed_model.dart';
 import '../sources/cat_api_service.dart';
 
 class CatRepositoryImpl implements CatRepository {
-  final CatApiService catApiService;
+  final CatApiService _catApiService;
 
-  CatRepositoryImpl({required this.catApiService});
+  CatRepositoryImpl({required CatApiService apiService}) : _catApiService = apiService;
 
   @override
   Future<CatImageModel> getRandomCatImage() async {
     try {
-      final catModel = await catApiService.getRandomCatImage();
+      final catModel = await _catApiService.getRandomCatImage();
       return catModel; 
     } catch (e) {
       throw Exception('Failed to get random cat: $e');
@@ -21,7 +21,7 @@ class CatRepositoryImpl implements CatRepository {
   @override
   Future<List<BreedModel>> getBreeds() async {
     try {
-      final breedModels = await catApiService.getBreeds();
+      final breedModels = await _catApiService.getBreeds();
       return breedModels; 
     } catch (e) {
       throw Exception('Failed to get breeds: $e');

@@ -1,10 +1,10 @@
 import '../entities/cat_image.dart';
 import '../repositories/cat_repository.dart';
 
-class GetRandomCat {
+class GetRandomCatUseCase {
   final CatRepository _repository;
 
-  GetRandomCat(this._repository);
+  GetRandomCatUseCase(this._repository);
 
   Future<CatImage> execute() {
     return _repository.getRandomCatImage();

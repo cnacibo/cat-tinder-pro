@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../core/injection.dart';
-import '../screens/main_tab_screen.dart';
+import 'main_tab_screen.dart';
 import '../../domain/usecases/sign_in_usecase.dart';
 import '../../domain/usecases/sign_up_usecase.dart';
 
