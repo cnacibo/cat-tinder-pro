@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'cats_screen.dart';
-import 'breeds_screen.dart';
+import 'cats/cats_screen.dart';
+import 'breeds/breeds_screen.dart';
 
 class MainTabScreen extends StatefulWidget {
   const MainTabScreen({super.key});

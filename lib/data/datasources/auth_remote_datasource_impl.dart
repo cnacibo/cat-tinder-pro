@@ -1,13 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import '../../core/error/exceptions.dart';
-
-abstract class AuthRemoteDataSource {
-  Future<String> signUp(String email, String password);
-  Future<String> signIn(String email, String password);
-  Future<void> signOut();
-  Future<String?> getCurrentUserId();
-  Future<bool> isLoggedIn();
-}
+import 'auth_remote_datasource.dart';
 
 class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   final FirebaseAuth firebaseAuth;

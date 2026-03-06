@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import '../../core/injection.dart';
-import 'main_tab_screen.dart';
 import '../../domain/usecases/sign_in_usecase.dart';
 import '../../domain/usecases/sign_up_usecase.dart';
+import '../main_tab_screen.dart';
 
 class AuthScreen extends StatelessWidget {
   const AuthScreen({super.key});

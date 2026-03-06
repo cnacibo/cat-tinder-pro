@@ -2,13 +2,14 @@ import '../models/cat_image_model.dart';
 import '../models/breed_model.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'cat_remote_datasource.dart';
 
-class CatApiService {
+class CatRemoteDataSourceImpl implements CatRemoteDataSource {
   static const _baseUrl = 'https://api.thecatapi.com/v1';
   final String? _apiKey;
   final http.Client _httpClient;
 
-  CatApiService({required http.Client httpClient, String? apiKey})
+  CatRemoteDataSourceImpl({required http.Client httpClient, String? apiKey})
       : _httpClient = httpClient,
         _apiKey = apiKey;
 

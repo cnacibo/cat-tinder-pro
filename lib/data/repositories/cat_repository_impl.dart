@@ -1,12 +1,12 @@
 import '../../domain/repositories/cat_repository.dart';
 import '../models/cat_image_model.dart';
 import '../models/breed_model.dart';
-import '../sources/cat_api_service.dart';
+import '../datasources/cat_remote_datasource.dart';
 
 class CatRepositoryImpl implements CatRepository {
-  final CatApiService _catApiService;
+  final CatRemoteDataSource _catApiService;
 
-  CatRepositoryImpl({required CatApiService apiService}) : _catApiService = apiService;
+  CatRepositoryImpl({required CatRemoteDataSource apiService}) : _catApiService = apiService;
 
   @override
   Future<CatImageModel> getRandomCatImage() async {

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import '../../domain/entities/breed.dart';
-import '../../domain/usecases/get_breeds.dart';
 import '../../core/injection.dart';
+import '../../domain/entities/breed.dart';
+import '../../domain/usecases/get_breeds_usecase.dart';
 
 class BreedsScreen extends StatefulWidget {
   const BreedsScreen({super.key});

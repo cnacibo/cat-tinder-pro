@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import '../../domain/entities/cat_image.dart';
-import './cat_details_screen.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'cat_details_screen.dart';
+import '../auth/auth_screen.dart';
 import '../../core/injection.dart'; 
+import '../../domain/entities/cat_image.dart';
 import '../../domain/repositories/auth_repository.dart';
-import 'auth_screen.dart';
-import '../../domain/usecases/get_random_cat.dart';
+import '../../domain/usecases/get_random_cat_usecase.dart';
+import '../../domain/usecases/get_likes_count_usecase.dart';
+import '../../domain/usecases/like_cat_usecase.dart';
+import '../../domain/usecases/reset_likes_usecase.dart';
 
 class CatsScreen extends StatefulWidget {
   const CatsScreen({super.key});
@@ -17,6 +19,9 @@ class CatsScreen extends StatefulWidget {
 
 class _CatsScreenState extends State<CatsScreen> {
   late final GetRandomCatUseCase _getRandomCat;
+  late final GetLikesCountUseCase _getLikesCount;
+  late final LikeCatUseCase _likeCat;
+  late final ResetLikesUseCase _resetLikes;
 
   Future<CatImage>? _catFuture;
   int _likesCount = 0;
@@ -26,8 +31,11 @@ class _CatsScreenState extends State<CatsScreen> {
   void initState() {
     super.initState();
     _getRandomCat = getIt<GetRandomCatUseCase>();
+    _getLikesCount = getIt<GetLikesCountUseCase>();
+    _likeCat = getIt<LikeCatUseCase>();
+    _resetLikes = getIt<ResetLikesUseCase>();
     _loadRandomCat();
-    _loadSavedLikes();
+    _loadLikes();
   }
 
   Future<void> _showLogoutDialog() async {
@@ -75,16 +83,11 @@ class _CatsScreenState extends State<CatsScreen> {
     );
   }
 
-  Future<void> _loadSavedLikes() async {
-    final prefs = await SharedPreferences.getInstance();
-    setState(() {
-      _likesCount = prefs.getInt('cat_tinder_likes') ?? 0;
-    });
-  }
-
-  Future<void> _saveLikes() async {
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.setInt('cat_tinder_likes', _likesCount);
+  Future<void> _loadLikes() async {
+    final count = await _getLikesCount.execute();
+    if (mounted) {
+      setState(() => _likesCount = count);
+    }
   }
 
   Future<void> _loadRandomCat() async {
@@ -94,17 +97,17 @@ class _CatsScreenState extends State<CatsScreen> {
     });
   }
 
-  void _handleSwipe(bool isRight) {
+  void _handleSwipe(bool isRight) async {
     if (isRight) {
-      setState(() => _likesCount++);
-      _saveLikes();
+      await _likeCat.execute();
+      await _loadLikes();
     }
     _loadRandomCat();
   }
 
-  void _resetLikes() async {
-    setState(() => _likesCount = 0);
-    _saveLikes();
+  void _resetLikesCounter() async {
+    await _resetLikes.execute();
+    await _loadLikes();
   }
 
   Widget _buildErrorWidget(Object error) {
@@ -381,7 +384,7 @@ class _CatsScreenState extends State<CatsScreen> {
           Text('$_likesCount', style: TextStyle(fontSize: 18, color: Theme.of(context).colorScheme.onPrimary)),
           IconButton(
             icon: const Icon(Icons.restart_alt, size: 18, color: Colors.white70),
-            onPressed: _resetLikes,
+            onPressed: _resetLikesCounter,
             tooltip: 'Reset counter',
           ),
         ],

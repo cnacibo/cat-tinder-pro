@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'onboarding_screen.dart';
-import '../../core/injection.dart' as di;
-import '../../domain/repositories/auth_repository.dart';
-import 'auth_screen.dart';
+import '../core/injection.dart' as di;
+import '../domain/repositories/auth_repository.dart';
+import 'onboarding/onboarding_screen.dart';
+import 'auth/auth_screen.dart';
 import 'main_tab_screen.dart';
 
 class InitialScreen extends StatefulWidget {
