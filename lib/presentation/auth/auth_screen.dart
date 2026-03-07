@@ -35,6 +35,7 @@ class _AuthFormState extends State<AuthForm> with SingleTickerProviderStateMixin
 
   late final SignInUseCase _signInUseCase;
   late final SignUpUseCase _signUpUseCase;
+  late final AnalyticsService _analytics;
 
   @override
   void initState() {
@@ -48,6 +49,7 @@ class _AuthFormState extends State<AuthForm> with SingleTickerProviderStateMixin
 
     _signInUseCase = getIt<SignInUseCase>();
     _signUpUseCase = getIt<SignUpUseCase>();
+    _analytics = getIt<AnalyticsService>();
   }
 
   @override
@@ -83,9 +85,9 @@ class _AuthFormState extends State<AuthForm> with SingleTickerProviderStateMixin
 
     if (success) {
       if (_isLogin) {
-        await AnalyticsService.logSignIn(email);
+        await _analytics.logSignIn(email);
       } else {
-        await AnalyticsService.logSignUp(email);
+        await _analytics.logSignUp(email);
       }
 
       if (!mounted) return;
@@ -94,9 +96,9 @@ class _AuthFormState extends State<AuthForm> with SingleTickerProviderStateMixin
       );
     } else {
       if (_isLogin) {
-        await AnalyticsService.logSignInFailed(email, 'invalid_credentials');
+        await _analytics.logSignInFailed(email, 'invalid_credentials');
       } else {
-        await AnalyticsService.logSignUpFailed(email, 'registration_failed');
+        await _analytics.logSignUpFailed(email, 'registration_failed');
       }
 
       if (!mounted) return;

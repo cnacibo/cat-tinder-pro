@@ -3,6 +3,10 @@ import 'package:get_it/get_it.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
+
+// Analytics
+import 'analytics/analytics_service.dart';
 
 // Use cases
 import '../domain/usecases/get_random_cat_usecase.dart';
@@ -44,6 +48,10 @@ Future<void> init({String? catApiKey}) async {
   getIt.registerLazySingleton<FlutterSecureStorage>(() => const FlutterSecureStorage());
   getIt.registerLazySingleton<http.Client>(() => http.Client());
   getIt.registerLazySingleton<FirebaseAuth>(() => FirebaseAuth.instance);
+
+  // Analytics
+  getIt.registerLazySingleton<FirebaseAnalytics>(() => FirebaseAnalytics.instance);
+  getIt.registerLazySingleton<AnalyticsService>(() => AnalyticsService(getIt<FirebaseAnalytics>()));
 
   // Data sources
   getIt.registerLazySingleton<AuthRemoteDataSource>(

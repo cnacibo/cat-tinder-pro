@@ -25,6 +25,7 @@ class _CatsScreenState extends State<CatsScreen> {
   late final GetLikesCountUseCase _getLikesCount;
   late final LikeCatUseCase _likeCat;
   late final ResetLikesUseCase _resetLikes;
+  late final AnalyticsService _analytics;
 
   Future<CatImage>? _catFuture;
   int _likesCount = 0;
@@ -37,6 +38,7 @@ class _CatsScreenState extends State<CatsScreen> {
     _getLikesCount = getIt<GetLikesCountUseCase>();
     _likeCat = getIt<LikeCatUseCase>();
     _resetLikes = getIt<ResetLikesUseCase>();
+    _analytics = getIt<AnalyticsService>();
     _loadRandomCat();
     _loadLikes();
   }
@@ -73,7 +75,7 @@ class _CatsScreenState extends State<CatsScreen> {
           SnackBar(content: Text('Logout failed')),
         );
     } else {
-      await AnalyticsService.logLogout();
+      await _analytics.logLogout();
       if (!mounted) return;
       Navigator.of(context).pushReplacement(
           MaterialPageRoute(builder: (_) => const AuthScreen()),

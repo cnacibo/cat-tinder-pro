@@ -14,6 +14,8 @@ import 'package:cat_tinder_pro/domain/usecases/get_breeds_usecase.dart';
 import 'package:cat_tinder_pro/domain/entities/cat_image.dart';
 import 'package:cat_tinder_pro/domain/entities/breed.dart';
 
+import 'package:cat_tinder_pro/core/analytics/analytics_service.dart';
+
 class MockSignInUseCase extends Mock implements SignInUseCase {}
 class MockSignUpUseCase extends Mock implements SignUpUseCase {}
 class MockNavigatorObserver extends Mock implements NavigatorObserver {}
@@ -23,6 +25,8 @@ class MockGetLikesCountUseCase extends Mock implements GetLikesCountUseCase {}
 class MockLikeCatUseCase extends Mock implements LikeCatUseCase {}
 class MockResetLikesUseCase extends Mock implements ResetLikesUseCase {}
 class MockGetBreedsUseCase extends Mock implements GetBreedsUseCase {}
+
+class MockAnalyticsService extends Mock implements AnalyticsService {}
 
 void main() {
   late MockSignInUseCase mockSignInUseCase;
@@ -35,6 +39,8 @@ void main() {
   late MockResetLikesUseCase mockResetLikesUseCase;
   late MockGetBreedsUseCase mockGetBreedsUseCase;
 
+  late MockAnalyticsService mockAnalyticsService;
+
   setUp(() {
     mockSignInUseCase = MockSignInUseCase();
     mockSignUpUseCase = MockSignUpUseCase();
@@ -46,6 +52,8 @@ void main() {
     mockResetLikesUseCase = MockResetLikesUseCase();
     mockGetBreedsUseCase = MockGetBreedsUseCase();
 
+    mockAnalyticsService = MockAnalyticsService();
+
     di.getIt.reset();
 
     di.getIt.registerFactory<SignInUseCase>(() => mockSignInUseCase);
@@ -56,6 +64,8 @@ void main() {
     di.getIt.registerFactory<LikeCatUseCase>(() => mockLikeCatUseCase);
     di.getIt.registerFactory<ResetLikesUseCase>(() => mockResetLikesUseCase);
     di.getIt.registerFactory<GetBreedsUseCase>(() => mockGetBreedsUseCase);
+
+    di.getIt.registerSingleton<AnalyticsService>(mockAnalyticsService);
 
     registerFallbackValue('');
 
@@ -69,6 +79,14 @@ void main() {
     when(() => mockLikeCatUseCase.execute()).thenAnswer((_) async => {});
     when(() => mockResetLikesUseCase.execute()).thenAnswer((_) async => {});
     when(() => mockGetBreedsUseCase.execute()).thenAnswer((_) async => <Breed>[]);
+
+    when(() => mockAnalyticsService.logSignIn(any())).thenAnswer((_) async => Future.value());
+    when(() => mockAnalyticsService.logSignUp(any())).thenAnswer((_) async => Future.value());
+    when(() => mockAnalyticsService.logSignInFailed(any(), any()))
+        .thenAnswer((_) async => Future.value());
+    when(() => mockAnalyticsService.logSignUpFailed(any(), any()))
+        .thenAnswer((_) async => Future.value());
+    when(() => mockAnalyticsService.logLogout()).thenAnswer((_) async => Future.value());
   });
 
   tearDown(() {
@@ -82,43 +100,45 @@ void main() {
     );
   }
 
-  testWidgets('shows error when email is invalid', (tester) async {
-    await tester.pumpWidget(createWidgetUnderTest());
-    await tester.pumpAndSettle();
+  group('AuthScreen', () {
+      testWidgets('should show error when email is invalid', (tester) async {
+      await tester.pumpWidget(createWidgetUnderTest());
+      await tester.pumpAndSettle();
 
-    final emailField = find.byType(TextFormField).first;
-    await tester.enterText(emailField, 'invalid-email');
+      final emailField = find.byType(TextFormField).first;
+      await tester.enterText(emailField, 'invalid-email');
 
-    final loginButton = find.widgetWithText(ElevatedButton, 'Login');
-    await tester.tap(loginButton);
-    await tester.pump(); 
+      final loginButton = find.widgetWithText(ElevatedButton, 'Login');
+      await tester.tap(loginButton);
+      await tester.pump(); 
 
-    expect(find.text('Invalid email'), findsOneWidget);
+      expect(find.text('Invalid email'), findsOneWidget);
 
-    verifyNever(() => mockSignInUseCase.execute(any(), any()));
-  });
+      verifyNever(() => mockSignInUseCase.execute(any(), any()));
+    });
 
-  testWidgets('successful login navigates to home', (tester) async {
-    when(() => mockSignInUseCase.execute('test@gmail.com', 'password')).thenAnswer((_) async => true);
+    testWidgets('should navigate to home if login is successful', (tester) async {
+      when(() => mockSignInUseCase.execute('test@gmail.com', 'password')).thenAnswer((_) async => true);
 
-    await tester.pumpWidget(createWidgetUnderTest());
-    await tester.pumpAndSettle();
+      await tester.pumpWidget(createWidgetUnderTest());
+      await tester.pumpAndSettle();
 
-    final emailField = find.byType(TextFormField).first;
-    final passwordField = find.byType(TextFormField).last;
+      final emailField = find.byType(TextFormField).first;
+      final passwordField = find.byType(TextFormField).last;
 
-    await tester.enterText(emailField, 'test@gmail.com');
-    await tester.enterText(passwordField, 'password');
+      await tester.enterText(emailField, 'test@gmail.com');
+      await tester.enterText(passwordField, 'password');
 
-    final loginButton = find.widgetWithText(ElevatedButton, 'Login');
-    await tester.tap(loginButton);
-    await tester.pump();
+      final loginButton = find.widgetWithText(ElevatedButton, 'Login');
+      await tester.tap(loginButton);
+      await tester.pump();
 
-    verify(() => mockSignInUseCase.execute('test@gmail.com', 'password')).called(1);
+      verify(() => mockSignInUseCase.execute('test@gmail.com', 'password')).called(1);
 
-    verify(() => mockObserver.didReplace(
-      oldRoute: any(named: 'oldRoute'),
-      newRoute: any(named: 'newRoute'),
-    )).called(1);
+      verify(() => mockObserver.didReplace(
+        oldRoute: any(named: 'oldRoute'),
+        newRoute: any(named: 'newRoute'),
+      )).called(1);
+    });
   });
 }
