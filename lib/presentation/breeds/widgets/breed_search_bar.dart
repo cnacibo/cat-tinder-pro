@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 
-class SearchBar extends StatelessWidget {
+class BreedSearchBar extends StatelessWidget {
   final TextEditingController controller;
   final VoidCallback onClear;
 
-  const SearchBar({
+  const BreedSearchBar({
     super.key,
     required this.controller,
     required this.onClear,
@@ -34,9 +34,7 @@ class SearchBar extends StatelessWidget {
             suffixIcon: controller.text.isNotEmpty
                 ? IconButton(
                     icon: const Icon(Icons.clear, color: Colors.grey),
-                    onPressed: () {
-                      onClear;
-                    },
+                    onPressed: onClear,
                   )
                 : null,
             border: InputBorder.none,

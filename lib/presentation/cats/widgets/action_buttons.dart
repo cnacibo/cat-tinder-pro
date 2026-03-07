@@ -15,13 +15,13 @@ class ActionButtons extends StatelessWidget {
           context,
           icon: Icons.close,
           color: Color(0xFFBF0603),
-          onTap: () => onDislike,
+          onTap: onDislike,
         ),
         _buildActionButton(
           context,
           icon: Icons.favorite,
           color: Color(0xFF386641),
-          onTap: () => onLike,
+          onTap: onLike,
         ),
       ],
     );

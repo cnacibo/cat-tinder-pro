@@ -3,7 +3,7 @@ import '../../core/injection.dart';
 import '../../domain/entities/breed.dart';
 import '../../domain/usecases/get_breeds_usecase.dart';
 import 'widgets/error_view.dart';
-import 'widgets/search_bar.dart';
+import 'widgets/breed_search_bar.dart';
 import 'widgets/empty_state.dart';
 import 'widgets/breed_card.dart';
 import 'widgets/breed_details.dart';
@@ -101,7 +101,7 @@ class _BreedsScreenState extends State<BreedsScreen> {
 
           return Column(
             children: [
-              SearchBar(controller: _searchController, onClear: _clearSearch),
+              BreedSearchBar(controller: _searchController, onClear: _clearSearch),
               if (displayBreeds.isEmpty && _isSearching)
                 Expanded(child: EmptyState())
               else
@@ -113,8 +113,13 @@ class _BreedsScreenState extends State<BreedsScreen> {
                       final breed = displayBreeds[index];
                       return BreedCard(
                         breed: breed,
-                        onTap: () => BreedDetails(breed: breed)
-                        );
+                        onTap: () {
+                          showDialog(
+                            context: context,
+                            builder: (_) => BreedDetails(breed: breed),
+                          );
+                        },
+                      );
                     },
                   ),
                 ),

@@ -27,7 +27,7 @@ class BreedCard extends StatelessWidget {
       color: cardColor, 
       child: InkWell(
         borderRadius: BorderRadius.circular(16),
-        onTap: () => onTap,
+        onTap: onTap,
         child: Padding(
           padding: const EdgeInsets.all(16),
           child: Row(
