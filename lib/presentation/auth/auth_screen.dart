@@ -88,6 +88,7 @@ class _AuthFormState extends State<AuthForm> with SingleTickerProviderStateMixin
         await AnalyticsService.logSignUp(email);
       }
 
+      if (!mounted) return;
       Navigator.of(context).pushReplacement(
         MaterialPageRoute(builder: (_) => const MainTabScreen()),
       );
@@ -97,7 +98,8 @@ class _AuthFormState extends State<AuthForm> with SingleTickerProviderStateMixin
       } else {
         await AnalyticsService.logSignUpFailed(email, 'registration_failed');
       }
-      
+
+      if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text(_isLogin ? 'Invalid credentials' : 'Registration failed')),
       );

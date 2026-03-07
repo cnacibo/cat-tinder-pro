@@ -67,12 +67,14 @@ class _CatsScreenState extends State<CatsScreen> {
   Future<void> _signOut() async {
     final authRepo = getIt<AuthRepository>();
     final result = await authRepo.signOut();
+    if (!mounted) return;
     if (!result) {
       ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text('Logout failed')),
         );
     } else {
       await AnalyticsService.logLogout();
+      if (!mounted) return;
       Navigator.of(context).pushReplacement(
           MaterialPageRoute(builder: (_) => const AuthScreen()),
         );

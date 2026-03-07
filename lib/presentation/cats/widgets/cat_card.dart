@@ -93,7 +93,7 @@ class _CatCardState extends State<CatCard> {
               imageUrl: widget.currentImageUrl ?? _generateCatUrl(),
               fit: BoxFit.cover,
               placeholder: (context, url) => Container(
-                color: Colors.black.withOpacity(0.05),
+                color: Colors.black.withValues(alpha: 0.05),
                 alignment: Alignment.center,
                 child: const SizedBox(
                   width: 48,
@@ -104,7 +104,7 @@ class _CatCardState extends State<CatCard> {
               errorWidget: (context, error, stackTrace) {
                 return Container(
                   alignment: Alignment.center,
-                  color: Colors.black.withOpacity(0.1),
+                  color: Colors.black.withValues(alpha: 0.1),
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
@@ -146,7 +146,7 @@ class _CatCardState extends State<CatCard> {
           gradient: LinearGradient(
             begin: Alignment.bottomCenter,
             end: Alignment.topCenter,
-            colors: [Colors.black.withOpacity(0.75), Colors.transparent],
+            colors: [Colors.black.withValues(alpha: 0.75), Colors.transparent],
           ),
           borderRadius: const BorderRadius.only(
             bottomLeft: Radius.circular(20),

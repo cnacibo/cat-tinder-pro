@@ -58,8 +58,8 @@ class CatTinderPro extends StatelessWidget {
           centerTitle: true,
         ),
         navigationBarTheme: NavigationBarThemeData(
-          backgroundColor: Color(0xFF283618).withOpacity(0.3),
-          indicatorColor: Color(0xFF283618).withOpacity(0.5),
+          backgroundColor: Color(0xFF283618).withValues(alpha: 0.3),
+          indicatorColor: Color(0xFF283618).withValues(alpha: 0.5),
           surfaceTintColor: Color(0xFF283618), 
           labelBehavior: NavigationDestinationLabelBehavior.alwaysShow,
         ),
