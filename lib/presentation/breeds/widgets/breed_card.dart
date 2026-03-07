@@ -52,7 +52,7 @@ class BreedCard extends StatelessWidget {
                           Icon(
                             Icons.location_on,
                             size: 14,
-                            color: textColor.withOpacity(0.7),
+                            color: textColor.withValues(alpha: 0.7),
                           ),
                           const SizedBox(width: 4),
                           Text(
@@ -72,7 +72,7 @@ class BreedCard extends StatelessWidget {
                         overflow: TextOverflow.ellipsis,
                         style: TextStyle(
                           fontSize: 14,
-                          color: textColor.withOpacity(0.7),
+                          color: textColor.withValues(alpha: 0.7),
                         ),
                       ),
                     ],

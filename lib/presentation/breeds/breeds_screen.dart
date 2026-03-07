@@ -125,7 +125,7 @@ class _BreedsScreenState extends State<BreedsScreen> {
                 ),
               Container(
                 padding: const EdgeInsets.all(16),
-                color: Theme.of(context).colorScheme.primary.withOpacity(0.05),
+                color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.05),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [

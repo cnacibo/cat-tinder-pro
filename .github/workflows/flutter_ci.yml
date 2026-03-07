@@ -18,6 +18,11 @@ jobs:
         with:
           flutter-version: '3.x'
           channel: 'stable'
+      
+      - name: Setup Firebase from secret
+        run: echo "$FIREBASE_OPTIONS" > lib/firebase_options.dart
+        env:
+          FIREBASE_OPTIONS: ${{ secrets.FIREBASE_OPTIONS }}
 
       - name: Install dependencies
         run: flutter pub get

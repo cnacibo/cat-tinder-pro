@@ -63,6 +63,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
     }
   }
 
+  @override
   Future<bool> isLoggedIn() async {
     return firebaseAuth.currentUser != null;
   }

@@ -44,7 +44,7 @@ class TemperamentSection extends StatelessWidget {
                         ),
                       ),
                       backgroundColor:
-                          Theme.of(context).colorScheme.primary.withOpacity(0.1),
+                          Theme.of(context).colorScheme.primary.withValues(alpha: 0.1),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(20),
                       ),

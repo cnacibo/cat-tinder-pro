@@ -13,6 +13,7 @@ class CatRemoteDataSourceImpl implements CatRemoteDataSource {
       : _httpClient = httpClient,
         _apiKey = apiKey;
 
+  @override
   Future<CatImageModel> getRandomCatImage() async {
     try {
       final response = await _httpClient.get(
@@ -39,6 +40,7 @@ class CatRemoteDataSourceImpl implements CatRemoteDataSource {
     }
   }
 
+  @override
   Future<List<BreedModel>> getBreeds() async {
     try {
       final response = await _httpClient.get(

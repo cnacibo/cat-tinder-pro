@@ -93,7 +93,7 @@ class RatingIndicator extends StatelessWidget {
                 decoration: BoxDecoration(
                   gradient: LinearGradient(
                     colors: [
-                      color.withOpacity(0.8),
+                      color.withValues(alpha: 0.8),
                       color,
                     ],
                   ),
