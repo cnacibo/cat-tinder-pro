@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../core/injection.dart';
+import '../../core/analytics/analytics_service.dart';
 import '../../domain/usecases/sign_in_usecase.dart';
 import '../../domain/usecases/sign_up_usecase.dart';
 import '../main_tab_screen.dart';
@@ -81,10 +82,22 @@ class _AuthFormState extends State<AuthForm> with SingleTickerProviderStateMixin
     setState(() => _isLoading = false);
 
     if (success) {
+      if (_isLogin) {
+        await AnalyticsService.logSignIn(email);
+      } else {
+        await AnalyticsService.logSignUp(email);
+      }
+
       Navigator.of(context).pushReplacement(
         MaterialPageRoute(builder: (_) => const MainTabScreen()),
       );
     } else {
+      if (_isLogin) {
+        await AnalyticsService.logSignInFailed(email, 'invalid_credentials');
+      } else {
+        await AnalyticsService.logSignUpFailed(email, 'registration_failed');
+      }
+      
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text(_isLogin ? 'Invalid credentials' : 'Registration failed')),
       );

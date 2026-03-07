@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import '../../core/injection.dart'; 
+import '../../core/analytics/analytics_service.dart';
 import '../cat_details/cat_details_screen.dart';
 import '../auth/auth_screen.dart';
-import '../../core/injection.dart'; 
 import '../../domain/entities/cat_image.dart';
 import '../../domain/repositories/auth_repository.dart';
 import '../../domain/usecases/get_random_cat_usecase.dart';
@@ -71,6 +72,7 @@ class _CatsScreenState extends State<CatsScreen> {
           SnackBar(content: Text('Logout failed')),
         );
     } else {
+      await AnalyticsService.logLogout();
       Navigator.of(context).pushReplacement(
           MaterialPageRoute(builder: (_) => const AuthScreen()),
         );
