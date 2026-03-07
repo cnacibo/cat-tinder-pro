@@ -47,7 +47,7 @@ class _CatCardState extends State<CatCard> {
           },
           child: AnimatedContainer(
             duration: const Duration(milliseconds: 200),
-            transform: Matrix4.identity()..translate(dragX),
+            transform: Matrix4.translationValues(dragX, 0, 0),
             child: AnimatedSwitcher(
               duration: const Duration(milliseconds: 400),
               switchInCurve: Curves.easeIn,
